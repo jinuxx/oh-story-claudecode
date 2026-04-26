@@ -6,17 +6,45 @@
 
 ```mermaid
 flowchart LR
-    scan{{"不知道写啥？"}}
-    scan --> scan_l["🔍 长篇扫榜\n/long-scan"]
-    scan --> scan_s["🔍 短篇扫榜\n/short-scan"]
-    ready{{"已有方向"}}
-    scan_l --> analyze_l["📖 长篇拆文\n/long-analyze"]
-    scan_s --> analyze_s["📖 短篇拆文\n/short-analyze"]
-    analyze_l --> write_l["✍️ 长篇写作\n/long-write"]
-    analyze_s --> write_s["✍️ 短篇写作\n/short-write"]
-    ready --> write_l
-    ready --> write_s
-    write_l --> deslop["🧹 去AI味\n/deslop"]
+    classDef entry fill:#f0f0f0,color:#333,stroke:#999,stroke-width:1px
+    classDef phase fill:#e8f4fd,color:#1a1a2e,stroke:#4a9be8,stroke-width:1px
+    classDef final fill:#fce4ec,color:#333,stroke:#e57373,stroke-width:1px
+
+    entry_l{{"长篇作者"}}:::entry
+    entry_s{{"短篇作者"}}:::entry
+    entry_r{{"已有方向"}}:::entry
+
+    subgraph S1 ["  扫榜选材"]
+        direction TB
+        scan_l["长篇扫榜"]:::phase
+        scan_s["短篇扫榜"]:::phase
+    end
+
+    subgraph S2 ["  拆文学习"]
+        direction TB
+        analyze_l["长篇拆文"]:::phase
+        analyze_s["短篇拆文"]:::phase
+    end
+
+    subgraph S3 ["  落笔创作"]
+        direction TB
+        write_l["长篇写作"]:::phase
+        write_s["短篇写作"]:::phase
+    end
+
+    subgraph S4 ["  精修定稿"]
+        deslop["去 AI 味"]:::final
+    end
+
+    entry_l --> scan_l
+    entry_s --> scan_s
+    scan_l --> analyze_l
+    scan_s --> analyze_s
+    analyze_l --> write_l
+    analyze_s --> write_s
+    entry_r -.->|跳过准备| write_l
+    entry_r -.->|跳过准备| write_s
+    write_l --> deslop
     write_s --> deslop
 ```
 
