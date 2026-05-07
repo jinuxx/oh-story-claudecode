@@ -1,8 +1,12 @@
 ---
 name: story-short-analyze
+version: 1.0.0
 description: |
   短篇网文拆文。拆解爆款短篇小说的叙事结构、情绪曲线、反转技巧、钩子设计。
   触发方式：/story-short-analyze、/短篇拆文、「帮我拆这个短篇」「分析这篇故事」
+metadata:
+  openclaw:
+    source: https://github.com/worldwonderer/oh-story-claudecode
 ---
 
 # story-short-analyze：短篇网文拆文
@@ -35,13 +39,20 @@ description: |
 
 ---
 
+## 输出目录
+
+输出到 `拆文库/{书名}/`（项目根目录下）。用户指定了其他路径时按用户指定路径输出。
+
+---
+
 ## Phase 2-6：拆文流程
 
 按 output-templates.md 中的模板输出：
 
 - **Phase 2**：全篇结构拆解。按 [output-templates.md Phase 2](references/output-templates.md) 输出结构划分和基本信息。
-- **Phase 3**：情绪曲线分析。按 [Phase 3](references/output-templates.md) 输出情绪节点和曲线特征。
-- **Phase 4**：反转设计分析。按 [Phase 4](references/output-templates.md) 输出反转类型、机制、时机。
+- **Phase 2.5**：人设速写。按 [Phase 2.5](references/output-templates.md) 分析主角 + 至少 2 个配角的核心矛盾、性格弧线、功能定位。
+- **Phase 3**：情绪曲线分析。按 [Phase 3](references/output-templates.md) 输出情绪节点和曲线特征，**每个节点同时标注该段的钩子类型**。
+- **Phase 4**：反转设计分析。按 [Phase 4](references/output-templates.md) 输出反转类型、机制、时机。**包含前置反转检查**：是否有在故事时间线之前就已存在的谎言/误判。
 - **Phase 5**：开头与结尾分析。按 [Phase 5](references/output-templates.md) 拆解首尾。
 - **Phase 6**：输出拆文报告。按 [Phase 6](references/output-templates.md) 模板输出完整报告。
 
@@ -51,13 +62,16 @@ description: |
 
 ---
 
-## 下一步建议
+## 流程衔接
 
-| 触发条件 | 推荐 |
-|---|---|
-| 拆完想写自己的 | 「结构看懂了，开写。用 `/story-short-write`。」 |
-| 市场方向不明 | 「先看市场。用 `/story-short-scan`。」 |
-| 适合做长篇 | 「用 `/story-long-scan` 看市场，再 `/story-long-analyze` 拆解。」 |
+**流水线：** 短篇
+**位置：** 拆文（第 2/3 步）
+
+| 时机 | 跳转到 | 命令 |
+|---|---|---|
+| 准备开写 | story-short-write | `/story-short-write` |
+| 需要市场数据 | story-short-scan | `/story-short-scan` |
+| 更适合长篇 | story-long-scan → story-long-analyze | `/story-long-scan` |
 
 ---
 

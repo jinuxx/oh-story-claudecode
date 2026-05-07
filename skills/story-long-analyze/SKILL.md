@@ -1,5 +1,6 @@
 ---
 name: story-long-analyze
+version: 1.0.0
 description: |
   长篇网文拆文。深度拆解爆款长篇小说的黄金三章、人设架构、爽点设计、节奏控制。
   支持两种模式：
@@ -7,6 +8,9 @@ description: |
   - 深度拆解：逐章拆解整本小说，输出结构化文件到指定目录
   触发方式：/story-long-analyze、/长篇拆文、「帮我拆这本书」「分析黄金三章」
   深度模式触发：「深度拆解」「完整拆解」「系统拆解」或提供小说文本文件路径
+metadata:
+  openclaw:
+    source: https://github.com/worldwonderer/oh-story-claudecode
 ---
 
 # story-long-analyze：长篇网文拆文
@@ -39,9 +43,9 @@ description: |
 
 按 output-templates.md 中的模板输出：
 
-- **Phase 2**：黄金三章逐章拆解。按 [output-templates.md 1.1](references/output-templates.md) 模板输出第一章，第二三章按 [1.2](references/output-templates.md) 说明追加关注点。
-- **Phase 3**：整体结构拆解。按 [output-templates.md 1.3](references/output-templates.md) 输出故事线分析、人物架构、节奏地图。
-- **Phase 4**：输出拆文报告。按 [output-templates.md 1.4](references/output-templates.md) 模板输出完整报告。
+- **Phase 2**：黄金三章逐章拆解。按 [output-templates.md「快速 Phase 2 第一章」](references/output-templates.md) 模板输出第一章，第二三章按「快速 Phase 2 第二三章」说明追加关注点。
+- **Phase 3**：整体结构拆解。按 [output-templates.md「快速 Phase 3 整体结构」](references/output-templates.md) 输出故事线分析、人物架构、节奏地图。反派设计增加类型路由：人形反派用标准模板（层级/逼格/动机链）；非人形反派（灵气复苏/末世/国运等抽象对抗型）用：核心对抗面{描述} | 紧迫感来源{描述} | 升级机制{描述} | 叙事替代{用什么替代传统打脸}。
+- **Phase 4**：输出拆文报告。按 [output-templates.md「快速 Phase 4 拆文报告」](references/output-templates.md) 模板输出完整报告。写法技巧类型扩展：一笔两用、延迟揭示、视角欺骗、对比锚点、行为循环、身体反应替代心理描写、**跨章回扣**（物品/意象在不同章节承担不同功能）。
 
 **Phase 4+**（可选）：用户想保存结果时，提示「想系统拆解整本书？用深度模式。」
 
@@ -49,10 +53,14 @@ description: |
 
 ## Phase 2B：深度拆解管道概要
 
+### 输出目录
+
+默认输出到 `拆文库/{书名}/`（项目根目录下）。用户指定了其他路径时按用户指定路径输出。
+
 ### 输出目录结构
 
 ```
-{小说标题}/
+拆文库/{书名}/
 ├── 概要.md
 ├── 章节/
 │   ├── 第1章_深度拆解.md
@@ -79,11 +87,11 @@ description: |
 | 0 | 概要提取 | 原始文本 | 概要.md + 章节索引 | 章节结构识别完成 |
 | 1 | 黄金三章 | 前3章原文 | 第1-3章_深度拆解.md | 3章拆解完成 |
 | 2 | 逐章摘要 | 分块章节文本 | 章节摘要.md（含情节点+角色）。角色过滤（龙套不提取、别名归类）。每章10-15情节点。 | 所有章节处理完成 |
-| 3 | 聚合分析 | 全部章节摘要 | 剧情/*.md + 故事线.md。**角色合并**（跨章节去重+别名归一）。**角色分级**（四级）。**孤立情节兜底**（4步）。**质量门控**（置信度/覆盖率/重叠率）。**覆盖率计算**。 | 质量检查通过 |
+| 3 | 聚合分析 | 全部章节摘要 | 剧情/*.md + 故事线.md。**角色合并**（跨章节去重+别名归一）。**角色分级**（主角/核心配角/功能角色/路人）。**孤立情节兜底**（4步）。**质量门控**（置信度/覆盖率/重叠率）。**覆盖率计算**。 | 质量检查通过 |
 | 4 | 设定+关系 | 阶段3合并后角色数据 | 设定/*.md + 角色/*.md。使用阶段3合并后的角色数据。 | 设定和关系提取完成 |
 | 5 | 汇总报告 | 全部输出 | 拆文报告.md | 报告生成完成 |
 
-> 管道 vs material-decomposition.md 映射：管道0 含 Material阶段1（章节解析）；管道1、5 为新增；管道2 = Material阶段2；管道3 = Material阶段3；管道4 合并 Material阶段4+5。
+> 与 material-decomposition.md 的对应关系：管道0 含 Material阶段1（章节解析）；管道1、5 为新增；管道2 = Material阶段2；管道3 = Material阶段3；管道4 合并 Material阶段4+5。
 
 详细模板见 [output-templates.md](references/output-templates.md)，方法论见 [material-decomposition.md](references/material-decomposition.md)。
 
@@ -91,7 +99,7 @@ description: |
 
 ## 质量门控概要
 
-阶段3-4完成前需通过质量检查，包含置信度、覆盖率、重叠率三项指标。具体阈值和计算方式见 [material-decomposition.md](references/material-decomposition.md)。自检清单见 [output-templates.md 4.3](references/output-templates.md)。
+阶段3-4完成前需通过质量检查，包含置信度、覆盖率、重叠率三项指标。具体阈值和计算方式见 [material-decomposition.md](references/material-decomposition.md)。自检清单见 [output-templates.md「质量检查」](references/output-templates.md)。
 
 ---
 
@@ -114,17 +122,20 @@ description: |
 3. 从断点所在块的起始章节恢复
 4. 覆盖该块已有输出
 
-完整模板见 [output-templates.md 4.1](references/output-templates.md)。
+完整模板见 [output-templates.md「深度 阶段5：汇总报告」](references/output-templates.md)。
 
 ---
 
-## 下一步建议
+## 流程衔接
 
-| 触发条件 | 推荐 |
-|---|---|
-| 拆完想写自己的 | 「用 `/story-long-write` 开书。」 |
-| 市场方向不明 | 「用 `/story-long-scan` 扫榜。」 |
-| 偏短篇模式 | 「用 `/story-short-scan` + `/story-short-analyze`。」 |
+**流水线：** 长篇
+**位置：** 拆文（第 2/3 步）
+
+| 时机 | 跳转到 | 命令 |
+|---|---|---|
+| 准备开写 | story-long-write | `/story-long-write` |
+| 需要市场数据 | story-long-scan | `/story-long-scan` |
+| 更适合短篇 | story-short-scan → story-short-analyze | `/story-short-scan` |
 
 ---
 
